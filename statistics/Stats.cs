@@ -6,45 +6,49 @@ using System.Threading.Tasks;
 
 namespace Dotnet
 {
-    public class Stats
+    internal class Stats
     {
-        public static void Statistics()
-        {
-            int[] test_data = { 40, 38, 37, 36, 34, 33, 32, 31, 30, 30, 30, 29, 26, 26, 19 };
-            int sum = 0 , maxcount = 0 , mode = 0 ;
-            decimal mean = 0;
+        internal int[] Numbers { set; get; }
 
-            // MEAN
-            foreach (int test in test_data)
+        public decimal Mean()
+        {
+            int sum = 0;
+            decimal mean = 0;
+            foreach (int test in Numbers)
             {
                 sum += test;
             }
-            mean = (decimal)sum / test_data.Length;
-            Console.WriteLine($"Mean : {mean}");
+            mean = (decimal)sum / Numbers.Length;
+            return mean;
+        }
 
-            // MEDIAN
-            Array.Sort(test_data);
-            int m = (test_data.Length / 2);
-            Console.WriteLine($"Median : {test_data[m]}");
+        public int Median()
+        {
+            Array.Sort(Numbers);
+            int m = (Numbers.Length / 2);
+            return m;
+        }
 
-            // MODE
-            for (int i = 0; i < test_data.Length; i++)
+        public int Mode()
+        {
+            int maxcount = 0, mode = 0;
+            for (int i = 0; i < Numbers.Length; i++)
             {
                 int count = 0;
-                for (int j = 1; j < test_data.Length - 1; j++)
+                for (int j = 1; j < Numbers.Length - 1; j++)
                 {
-                    if(test_data[i] == test_data[j])
-                        {
-                            count++;
-                        }
+                    if (Numbers[i] == Numbers[j])
+                    {
+                        count++;
                     }
-                if(count > maxcount)
+                }
+                if (count > maxcount)
                 {
                     maxcount = count;
-                    mode = test_data[i];
+                    mode = Numbers[i];
                 }
-                Console.WriteLine($"Mode : {mode}");
             }
+            return mode;
         }
     }
 }
