@@ -4,47 +4,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dotnet
+namespace DotNet
 {
-    public class Stats
+    internal class Stats
     {
-        public static void Statistics()
+        internal int[] Numbers { get; set; }
+
+        internal Results GetStatsResult()
         {
-            int[] test_data = { 40, 38, 37, 36, 34, 33, 32, 31, 30, 30, 30, 29, 26, 26, 19 };
-            int sum = 0 , maxcount = 0 , mode = 0 ;
-            decimal mean = 0;
+            var result = new Results();
+            result.Mean = CalcMean();
+            result.Median = CalcMedian();
+            result.Mode = CalcMode();
+            return result;
+        }
 
-            // MEAN
-            foreach (int test in test_data)
-            {
-                sum += test;
-            }
-            mean = (decimal)sum / test_data.Length;
-            Console.WriteLine($"Mean : {mean}");
+        private int CalcMean() => Numbers.Sum() / Numbers.Length;
 
-            // MEDIAN
-            Array.Sort(test_data);
-            int m = (test_data.Length / 2);
-            Console.WriteLine($"Median : {test_data[m]}");
+        private int CalcMedian()
+        {
+            var sortedData = Numbers.OrderBy(i => i).ToArray();
+            var n = sortedData.Length;
+            var median = n % 2 == 0
+                ? (sortedData[n / 2 - 1] + sortedData[n / 2]) / 2
+                : sortedData[n / 2];
+            return median;
+        }
 
-            // MODE
-            for (int i = 0; i < test_data.Length; i++)
+        private int CalcMode()
+        {
+            int mode = 0 , maxcount =0 ;
+            for (int i = 0; i < Numbers.Length; i++)
             {
                 int count = 0;
-                for (int j = 1; j < test_data.Length - 1; j++)
+                for (int j = 1; j < Numbers.Length - 1; j++)
                 {
-                    if(test_data[i] == test_data[j])
-                        {
-                            count++;
-                        }
+                    if (Numbers[i] == Numbers[j])
+                    {
+                        count++;
                     }
-                if(count > maxcount)
+                }
+                if (count > maxcount)
                 {
                     maxcount = count;
-                    mode = test_data[i];
+                    mode = Numbers[i];
                 }
-                Console.WriteLine($"Mode : {mode}");
             }
+            return mode;
         }
     }
 }
